@@ -79,6 +79,7 @@ public class App {
 		// read args
 		// check if args is valid
 		// do convertion
+		// save json file
 
 		if( args == null || args.length < 2) {
 			System.err.println("ERROR: input and/or output files are missing.");
