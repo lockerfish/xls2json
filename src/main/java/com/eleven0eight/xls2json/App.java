@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) 2012 Hendrix Tavarez
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 package com.eleven0eight.xls2json;
 
 import java.io.BufferedWriter;
@@ -22,8 +46,6 @@ import org.apache.poi.ss.usermodel.Row;
 public class App {
 
 	public String convertXls2Json(FileInputStream fis) throws Exception {
-
-//		FileInputStream fis = new FileInputStream("/home/hendrix/Desktop/test1.xls");
 
 		Workbook workbook = WorkbookFactory.create(fis);
 
@@ -75,11 +97,6 @@ public class App {
 	}
 
     public static void main( String[] args ) throws Exception {
-
-		// read args
-		// check if args is valid
-		// do convertion
-		// save json file
 
 		if( args == null || args.length < 2) {
 			System.err.println("ERROR: input and/or output files are missing.");
