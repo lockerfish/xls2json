@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.Iterator;
+import java.util.ArrayList;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -45,33 +46,34 @@ import org.apache.poi.ss.usermodel.Row;
  */
 public class App {
 
-	public String convertXls2Json(FileInputStream fis) throws Exception {
+	public String convertXlsToJson(FileInputStream fis) throws Exception {
 
 		Workbook workbook = WorkbookFactory.create(fis);
-
 		Sheet sheet = workbook.getSheetAt(0);
-
 		JSONObject json = new JSONObject();
+		JSONArray items = new JSONArray();
+		ArrayList cols = new ArrayList();
 
-		JSONArray rows = new JSONArray();
+		for( int i=0; i <= sheet.getLastRowNum(); i++ ) {
+			Row row = sheet.getRow(i);
+			JSONObject item = new JSONObject();
 
-		for( Iterator<Row> rowsIT = sheet.rowIterator(); rowsIT.hasNext(); ) {
-
-			Row row = rowsIT.next();
-			JSONObject jRow = new JSONObject();
-
-			JSONArray cells = new JSONArray();
-
-			for( Iterator<Cell> cellsIT = row.cellIterator(); cellsIT.hasNext(); ) {
-				Cell cell = cellsIT.next();
-				cells.put( cell.getStringCellValue() );
+			for(short colIndex=row.getFirstCellNum(); colIndex <= row.getLastCellNum(); colIndex++) {
+				Cell cell = row.getCell(colIndex);
+				if(cell == null) {
+					continue;
+				}
+				if(i == 0) { // header
+					cols.add( colIndex, cell.getStringCellValue() );
+				} else {
+					item.put((String)cols.get(colIndex), cell.getStringCellValue());
+				}
 			}
-			jRow.put( "cell", cells );
-			rows.put ( jRow );
+			if(item.length() > 0) {
+				items.put(item);
+			}
 		}
-
-		json.put( "rows", rows );
-
+		json.put("items", items);
 		return json.toString();
 
 	}
@@ -96,6 +98,20 @@ public class App {
 
 	}
 
+	public String getJSON(String xlsFile) {
+
+		try {
+			FileInputStream fis = checkInputFile(xlsFile);
+			if(fis != null) {
+				return convertXlsToJson(fis);
+			}
+		} catch(Exception e) {
+			// do nothing
+		}
+
+		return "";
+	}
+
     public static void main( String[] args ) throws Exception {
 
 		if( args == null || args.length < 2) {
@@ -112,7 +128,7 @@ public class App {
 			FileInputStream fis = app.checkInputFile(filename);
 			if( fis != null) {
 				System.out.println("converting file " + filename  + " to JSON.");
-				String json = app.convertXls2Json(fis);
+				String json = app.convertXlsToJson(fis);
 				System.out.println("saving json file " + outfile );
 				app.saveJson(outfile, json);
 			}
